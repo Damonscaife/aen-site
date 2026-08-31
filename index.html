@@ -85,11 +85,15 @@ p{margin:0 0 1em}
 header{
   position:sticky;top:0;z-index:50;background:#fff;
   border-bottom:1px solid var(--line);box-shadow:0 1px 12px rgba(11,42,91,.06);
+  transition:box-shadow .3s ease, background .3s ease;
 }
-.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:8px 24px;max-width:var(--max);margin:0 auto}
+header.is-scrolled{box-shadow:0 4px 22px rgba(11,42,91,.10)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 24px;max-width:var(--max);margin:0 auto;transition:padding .32s cubic-bezier(.22,.61,.36,1)}
+header.is-scrolled .nav{padding:6px 24px}
 .brand{display:flex;align-items:center;gap:12px}
 .logomark{display:block;background:var(--logo) left center/contain no-repeat}
-.brand .logomark{height:84px;width:165px}
+.brand .logomark{height:104px;width:204px;transition:height .32s cubic-bezier(.22,.61,.36,1), width .32s cubic-bezier(.22,.61,.36,1)}
+header.is-scrolled .brand .logomark{height:64px;width:126px}
 .brand b{display:block;font-size:1.02rem;color:var(--ink);letter-spacing:-.01em;line-height:1.1}
 .brand span{display:block;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);font-weight:700}
 .nav-links{display:flex;align-items:center;gap:28px}
@@ -97,7 +101,9 @@ header{
 .nav-links a:hover{color:var(--blue)}
 .nav-cta{background:var(--blue);color:#fff!important;padding:11px 22px;border-radius:999px;font-size:.95rem}
 .nav-cta:hover{background:#0f47a5}
-@media(max-width:860px){.nav-links a:not(.nav-cta){display:none}.brand .logomark{height:56px;width:110px}}
+@media(max-width:860px){.nav-links a:not(.nav-cta){display:none}
+  .brand .logomark{height:66px;width:130px}
+  header.is-scrolled .brand .logomark{height:48px;width:94px}}
 
 /* hero */
 .hero{
@@ -109,7 +115,7 @@ header{
   content:"";position:absolute;inset:auto 0 0 0;height:5px;
   background:linear-gradient(90deg,var(--blue) 0%,var(--blue) 50%,var(--gold) 50%,var(--gold) 100%);
 }
-.hero-inner{max-width:var(--max);margin:0 auto;padding:110px 24px 120px}
+.hero-inner{max-width:var(--max);margin:0 auto;padding:110px 24px 140px;position:relative}
 .hero h1{color:#fff;max-width:15ch}
 .hero h1 em{font-style:normal;color:var(--gold-light)}
 .hero p{color:rgba(255,255,255,.9);font-size:1.18rem;max-width:56ch}
@@ -234,6 +240,87 @@ footer{background:#050f21;color:rgba(255,255,255,.55);padding:52px 0 34px;font-s
 }
 .voltage b{color:var(--gold);font-size:1.35rem;letter-spacing:-.01em}
 .voltage span{color:rgba(255,255,255,.8);font-size:.94rem}
+
+/* ============ interaction layer ============ */
+html{scroll-behavior:smooth}
+
+/* nav links: sliding underline */
+.nav-links a:not(.nav-cta){position:relative;padding:6px 2px;transition:color .2s ease}
+.nav-links a:not(.nav-cta)::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold);
+  transform:scaleX(0);transform-origin:right;transition:transform .28s cubic-bezier(.22,.61,.36,1);
+}
+.nav-links a:not(.nav-cta):hover::after{transform:scaleX(1);transform-origin:left}
+
+/* buttons: lift + glow */
+.btn,.nav-cta{transition:transform .25s ease, box-shadow .25s ease, background .25s ease, border-color .25s ease}
+.btn--primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(224,160,33,.34), 0 0 36px rgba(224,160,33,.30)}
+.btn--blue:hover,.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(18,86,196,.30), 0 0 36px rgba(18,86,196,.28)}
+.btn--ghost:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(255,255,255,.18)}
+.btn:active,.nav-cta:active{transform:translateY(0)}
+
+/* service cards: lift, glow, image zoom */
+.card{transition:transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease, border-color .3s ease}
+.card .card-img{transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+.card:hover{transform:translateY(-6px);box-shadow:0 20px 44px rgba(11,42,91,.16), 0 0 32px rgba(18,86,196,.10)}
+.card:hover .card-img{transform:scale(1.06)}
+.card{overflow:hidden}
+
+/* capability + client cells */
+.cap,.client{transition:background .25s ease, color .25s ease, transform .25s ease}
+.cap:hover{background:#fbfcfe;transform:translateY(-2px)}
+.trust-item{transition:background .25s ease}
+.trust-item:hover{background:rgba(255,255,255,.05)}
+.method{transition:transform .25s ease, background .25s ease, box-shadow .25s ease}
+.method:hover{box-shadow:0 0 30px rgba(255,255,255,.12)}
+
+/* eyebrow as a pill */
+.eyebrow{
+  border:1px solid rgba(18,86,196,.28);border-radius:999px;padding:7px 16px;
+  background:rgba(18,86,196,.05);
+}
+.eyebrow--gold{border-color:rgba(224,160,33,.45);background:rgba(224,160,33,.10)}
+
+/* accent rule under centered headings */
+.center h2::after{
+  content:"";display:block;width:64px;height:3px;border-radius:2px;
+  background:linear-gradient(90deg,var(--blue),var(--gold));
+  margin:18px auto 0;
+}
+
+/* contact card: slow attention pulse */
+@keyframes aenPulse{
+  0%,100%{box-shadow:0 18px 40px rgba(11,42,91,.18), 0 0 0 rgba(224,160,33,0)}
+  50%{box-shadow:0 18px 46px rgba(11,42,91,.22), 0 0 46px rgba(224,160,33,.22)}
+}
+.contact-card{animation:aenPulse 4.5s ease-in-out infinite}
+
+/* scroll hint */
+.scroll-hint{
+  position:absolute;left:50%;bottom:30px;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.68);
+}
+.scroll-hint span{animation:aenGlow 2.4s ease-in-out infinite}
+.scroll-hint i{
+  display:block;width:1px;height:34px;
+  background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,0));
+  animation:aenDrop 2.4s ease-in-out infinite;
+}
+@keyframes aenGlow{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes aenDrop{0%,100%{transform:scaleY(.5);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+
+/* scroll reveal */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1)}
+.reveal.in{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .contact-card,.scroll-hint span,.scroll-hint i{animation:none}
+  .card:hover,.btn:hover,.nav-cta:hover{transform:none}
+  .brand .logomark,.nav{transition:none}
+}
 </style>
 </head>
 <body>
@@ -267,6 +354,7 @@ footer{background:#050f21;color:rgba(255,255,255,.55);padding:52px 0 34px;font-s
       <a class="btn btn--primary" href="#contact">Request a Quote</a>
       <a class="btn btn--ghost" href="#services">Explore Services</a>
     </div>
+    <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><i></i></div>
   </div>
 </section>
 
@@ -570,6 +658,34 @@ footer{background:#050f21;color:rgba(255,255,255,.55);padding:52px 0 34px;font-s
   </div>
 </footer>
 
+<script>
+(function(){
+  var hdr = document.querySelector('header');
+  var onScroll = function(){
+    if (window.scrollY > 60) hdr.classList.add('is-scrolled');
+    else hdr.classList.remove('is-scrolled');
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var targets = document.querySelectorAll('.card, .split > div, .split img, .cap, .caplist > div, .voltage, .contact-card, .trust-item, .center h2, .center .lede, .clients');
+  if (!reduce && 'IntersectionObserver' in window) {
+    Array.prototype.forEach.call(targets, function(el){ el.classList.add('reveal'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) {
+          var sibs = e.target.parentNode ? Array.prototype.indexOf.call(e.target.parentNode.children, e.target) : 0;
+          e.target.style.transitionDelay = Math.min(sibs, 5) * 70 + 'ms';
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, {rootMargin: '0px 0px -8% 0px', threshold: 0.12});
+    Array.prototype.forEach.call(targets, function(el){ io.observe(el); });
+  }
+})();
+</script>
 <script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
 </body>
 </html>
