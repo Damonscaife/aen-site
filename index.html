@@ -351,7 +351,7 @@ html{scroll-behavior:smooth}
 </header>
 
 <section class="hero" id="top">
-  <video class="hero-video" autoplay loop muted playsinline preload="metadata" poster="hero-poster.jpg" aria-hidden="true">
+  <video class="hero-video" autoplay loop muted playsinline preload="auto" poster="hero-poster.jpg" aria-hidden="true">
     <source src="hero.mp4" type="video/mp4">
   </video>
   <div class="hero-tint" aria-hidden="true"></div>
@@ -681,6 +681,18 @@ html{scroll-behavior:smooth}
   };
   onScroll();
   window.addEventListener('scroll', onScroll, {passive:true});
+
+  // hero video: keep trying to play (some browsers defer until visible/interacted)
+  var hv = document.querySelector('.hero-video');
+  if (hv) {
+    var tryPlay = function(){ var p = hv.play(); if (p && p.catch) p.catch(function(){}); };
+    tryPlay();
+    hv.addEventListener('loadeddata', tryPlay);
+    document.addEventListener('visibilitychange', function(){ if (!document.hidden) tryPlay(); });
+    ['pointerdown','touchstart','scroll','keydown'].forEach(function(ev){
+      window.addEventListener(ev, tryPlay, {once:true, passive:true});
+    });
+  }
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var targets = document.querySelectorAll('.card, .split > div, .split img, .cap, .caplist > div, .voltage, .contact-card, .trust-item, .center h2, .center .lede, .clients');
