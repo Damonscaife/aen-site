@@ -305,21 +305,6 @@ html{scroll-behavior:smooth}
 }
 .contact-card{animation:aenPulse 4.5s ease-in-out infinite}
 
-/* scroll hint */
-.scroll-hint{
-  position:absolute;left:50%;bottom:30px;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:7px;
-  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.68);
-}
-.scroll-hint span{animation:aenGlow 2.4s ease-in-out infinite}
-.scroll-hint i{
-  display:block;width:1px;height:34px;
-  background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,0));
-  animation:aenDrop 2.4s ease-in-out infinite;
-}
-@keyframes aenGlow{0%,100%{opacity:.5}50%{opacity:1}}
-@keyframes aenDrop{0%,100%{transform:scaleY(.5);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
-
 /* scroll reveal */
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1)}
 .reveal.in{opacity:1;transform:none}
@@ -327,7 +312,7 @@ html{scroll-behavior:smooth}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none;transition:none}
-  .contact-card,.scroll-hint span,.scroll-hint i{animation:none}
+  .contact-card{animation:none}
   .card:hover,.btn:hover,.nav-cta:hover{transform:none}
   .brand .logomark,.nav{transition:none}
 }
@@ -368,7 +353,6 @@ html{scroll-behavior:smooth}
       <a class="btn btn--primary" href="#contact">Request a Quote</a>
       <a class="btn btn--ghost" href="#services">Explore Services</a>
     </div>
-    <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><i></i></div>
   </div>
 </section>
 
