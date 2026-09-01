@@ -52,7 +52,7 @@ body{
 img{max-width:100%;display:block}
 a{color:var(--blue);text-decoration:none}
 h1,h2,h3,h4{color:var(--ink);line-height:1.15;margin:0 0 .5em;letter-spacing:-.02em}
-h1{font-size:clamp(2.1rem,5.2vw,3.6rem);font-weight:800}
+h1{font-size:clamp(1.95rem,5.2vw,3.6rem);font-weight:800}
 h2{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:800}
 h3{font-size:1.15rem;font-weight:700}
 p{margin:0 0 1em}
@@ -120,7 +120,7 @@ header.is-scrolled .brand .logomark{height:64px;width:126px}
 .hero h1{margin-left:auto;margin-right:auto}
 .hero p{margin-left:auto;margin-right:auto}
 .hero-actions{justify-content:center}
-.hero h1{color:#fff;max-width:17ch;text-shadow:0 2px 30px rgba(0,0,0,.45)}
+.hero h1{color:#fff;max-width:none;text-shadow:0 2px 30px rgba(0,0,0,.45);text-wrap:balance}
 .hero h1 em{font-style:normal;color:var(--gold-light)}
 .hero p{color:rgba(255,255,255,.92);font-size:1.18rem;max-width:56ch;text-shadow:0 1px 18px rgba(0,0,0,.45)}
 .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
@@ -382,7 +382,7 @@ html{scroll-behavior:smooth}
   </video>
   <div class="hero-tint" aria-hidden="true"></div>
   <div class="hero-inner">
-    <h1>Power done <em>right</em>—the first time.</h1>
+    <h1>Power done <em>right</em><br>the first time</h1>
     <p>All Electrical Needs is a full-service electrical contractor handling medium to large-scale projects: solar, EV charging, fiber optics, low and high voltage systems, and automotive electrical diagnostics.</p>
     <div class="hero-actions">
       <a class="btn btn--primary" href="#contact">Request a Quote</a>
