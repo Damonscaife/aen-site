@@ -290,6 +290,73 @@ html{scroll-behavior:smooth}
   .card:hover,.btn:hover,.nav-cta:hover{transform:none}
   .brand .logomark,.nav{transition:none}
 }
+
+/* ============ electric buttons ============ */
+.btn,.nav-cta{position:relative;overflow:hidden;isolation:isolate}
+
+/* arc sweep across the face on hover */
+.btn::before,.nav-cta::before{
+  content:"";position:absolute;top:0;left:-150%;width:55%;height:100%;
+  transform:skewX(-18deg);pointer-events:none;z-index:0;
+  background:linear-gradient(105deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.15) 35%,
+    rgba(255,255,255,.65) 50%,
+    rgba(255,255,255,.15) 65%,
+    rgba(255,255,255,0) 100%);
+}
+.btn:hover::before,.nav-cta:hover::before{animation:aenArc .72s cubic-bezier(.3,.7,.4,1)}
+@keyframes aenArc{from{left:-150%}to{left:150%}}
+
+/* live-current flicker on the glow */
+@keyframes aenLiveGold{
+  0%{box-shadow:0 10px 24px rgba(224,160,33,.34), 0 0 34px rgba(224,160,33,.30)}
+  38%{box-shadow:0 10px 24px rgba(224,160,33,.40), 0 0 48px rgba(224,160,33,.46)}
+  46%{box-shadow:0 10px 24px rgba(224,160,33,.30), 0 0 26px rgba(224,160,33,.22)}
+  62%{box-shadow:0 10px 24px rgba(224,160,33,.42), 0 0 52px rgba(224,160,33,.50)}
+  100%{box-shadow:0 10px 24px rgba(224,160,33,.34), 0 0 38px rgba(224,160,33,.34)}
+}
+@keyframes aenLiveBlue{
+  0%{box-shadow:0 10px 24px rgba(18,86,196,.30), 0 0 34px rgba(90,150,255,.30)}
+  38%{box-shadow:0 10px 24px rgba(18,86,196,.36), 0 0 48px rgba(90,150,255,.48)}
+  46%{box-shadow:0 10px 24px rgba(18,86,196,.26), 0 0 26px rgba(90,150,255,.22)}
+  62%{box-shadow:0 10px 24px rgba(18,86,196,.38), 0 0 52px rgba(90,150,255,.52)}
+  100%{box-shadow:0 10px 24px rgba(18,86,196,.30), 0 0 38px rgba(90,150,255,.34)}
+}
+@keyframes aenLiveWhite{
+  0%{box-shadow:0 0 26px rgba(255,255,255,.16)}
+  40%{box-shadow:0 0 40px rgba(255,255,255,.30)}
+  50%{box-shadow:0 0 20px rgba(255,255,255,.12)}
+  100%{box-shadow:0 0 34px rgba(255,255,255,.22)}
+}
+.btn--primary:hover{animation:aenLiveGold 1.8s ease-in-out infinite}
+.btn--blue:hover,.nav-cta:hover{animation:aenLiveBlue 1.8s ease-in-out infinite}
+.btn--ghost:hover{animation:aenLiveWhite 1.8s ease-in-out infinite;border-color:#fff}
+
+/* discharge on press */
+.btn:active,.nav-cta:active{transform:translateY(0) scale(.975)}
+.btn.is-zapped,.nav-cta.is-zapped{
+  animation:aenZap .42s ease-out;
+}
+@keyframes aenZap{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.85), 0 0 60px rgba(255,255,255,.55);filter:brightness(1.5)}
+  40%{box-shadow:0 0 0 6px rgba(255,255,255,0), 0 0 30px rgba(255,255,255,.2);filter:brightness(1.05)}
+  100%{box-shadow:0 0 0 0 rgba(255,255,255,0), 0 0 0 rgba(255,255,255,0);filter:none}
+}
+.aen-spark{
+  position:absolute;width:12px;height:12px;border-radius:50%;pointer-events:none;z-index:1;
+  transform:translate(-50%,-50%) scale(0);
+  background:radial-gradient(circle,rgba(255,255,255,.95) 0%,rgba(255,255,255,.55) 40%,rgba(255,255,255,0) 72%);
+  animation:aenSpark .5s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes aenSpark{to{transform:translate(-50%,-50%) scale(22);opacity:0}}
+
+@media(prefers-reduced-motion:reduce){
+  .btn::before,.nav-cta::before{display:none}
+  .btn--primary:hover,.btn--blue:hover,.nav-cta:hover,.btn--ghost:hover{animation:none}
+  .btn.is-zapped,.nav-cta.is-zapped{animation:none}
+  .aen-spark{display:none}
+}
 </style>
 </head>
 <body>
@@ -315,8 +382,8 @@ html{scroll-behavior:smooth}
   </video>
   <div class="hero-tint" aria-hidden="true"></div>
   <div class="hero-inner">
-    <h1>One contractor for power, fiber, solar and EV.</h1>
-    <p>All Electrical Needs runs 120/240V and 277/480V power, fiber and structured cabling, solar arrays, EV charging and vehicle electrical diagnostics. Same crew, same license, same job.</p>
+    <h1>Power done <em>right</em>—the first time.</h1>
+    <p>All Electrical Needs is a full-service electrical contractor handling medium to large-scale projects: solar, EV charging, fiber optics, low and high voltage systems, and automotive electrical diagnostics.</p>
     <div class="hero-actions">
       <a class="btn btn--primary" href="#contact">Request a Quote</a>
       <a class="btn btn--ghost" href="#services">Explore Services</a>
@@ -637,6 +704,25 @@ html{scroll-behavior:smooth}
       window.addEventListener(ev, tryPlay, {once:true, passive:true});
     });
   }
+
+  // electric press: spark at the pointer + discharge flash
+  var zapTargets = document.querySelectorAll('.btn, .nav-cta');
+  Array.prototype.forEach.call(zapTargets, function(btn){
+    btn.addEventListener('pointerdown', function(e){
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var r = btn.getBoundingClientRect();
+      var s = document.createElement('span');
+      s.className = 'aen-spark';
+      s.style.left = ((e.clientX - r.left) || r.width / 2) + 'px';
+      s.style.top  = ((e.clientY - r.top)  || r.height / 2) + 'px';
+      btn.appendChild(s);
+      setTimeout(function(){ if (s.parentNode) s.parentNode.removeChild(s); }, 520);
+      btn.classList.remove('is-zapped');
+      void btn.offsetWidth;
+      btn.classList.add('is-zapped');
+      setTimeout(function(){ btn.classList.remove('is-zapped'); }, 440);
+    });
+  });
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var targets = document.querySelectorAll('.card, .split > div, .split img, .cap, .caplist > div, .voltage, .contact-card, .trust-item, .center h2, .center .lede, .clients');
